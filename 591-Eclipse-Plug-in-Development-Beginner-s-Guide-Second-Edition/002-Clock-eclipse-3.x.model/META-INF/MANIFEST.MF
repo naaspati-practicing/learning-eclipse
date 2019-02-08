@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Clock
+Bundle-SymbolicName: 002-Clock-eclipse-3.x.model;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: sam.clock.ui.Activator
+Bundle-Vendor: PacktPub
+Require-Bundle: org.eclipse.ui,
+  org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: 002-Clock-eclipse-3.x.model
+Bundle-ActivationPolicy: lazy

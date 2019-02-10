@@ -1,0 +1,5 @@
+this project uses eclipse 3.x model instead 
+4.x model (why? because book says so, i hanve intention to learn 
+dead techno..)
+
+eclipse 4.x has backword support to 3.x

@@ -1,6 +1,8 @@
 package sam.clock.ui.views;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
@@ -36,23 +38,49 @@ public class ClockView extends ViewPart {
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "sam.clock.ui.views.ClockView";
+	private Color RED,BLUE,GREEN;
 
 	@Override
 	public void createPartControl(Composite parent) {
+		StringBuilder sb = new StringBuilder();
+		Arrays.stream(parent.getDisplay().getDeviceData().objects)
+		.collect(Collectors.groupingBy(s -> s == null ? null : s.getClass(), Collectors.counting()))
+		.forEach((s,t) -> sb.append(s == null ? "null" : s.getName()).append(": ").append(t).append('\n'));
+		
+		System.out.println(sb);
+		
 		parent.setLayout(new FillLayout(SWT.VERTICAL));
 		final Canvas clock = new Canvas(parent, SWT.NONE);
-		clock.addPaintListener(p -> paintClock(p));
 		
+		RED = parent.getDisplay().getSystemColor(SWT.COLOR_RED);
+		BLUE = parent.getDisplay().getSystemColor(SWT.COLOR_BLUE);
+		GREEN = parent.getDisplay().getSystemColor(SWT.COLOR_GREEN);
+		
+		/* - Generally, instances owned by other classes in accessors should not be disposed;
+		 * - the Color instance returned by the Display method getSystemColor is owned 
+		 *   by the Display class, so it shouldn't be disposed by the caller. 
+		 *   Resource objects that are instantiated by the caller must be disposed of explicitly.
+		 *   
+		 * parent.addDisposeListener(d -> {
+			RED.dispose();
+			BLUE.dispose();
+			GREEN.dispose();
+		});
+		 */
+		
+		clock.addPaintListener(p -> paintClock(p));
 		Runnable repaint = clock::redraw;
 		
-		Thread t = new Thread(() -> {
+		Thread th = new Thread(() -> {
 			System.out.println("started");
+			
 			while(true) {
-				update();
 				if(clock.isDisposed()) {
-					System.out.println("stopped");
+					System.out.println("STOPPED");
 					break;
 				}
+				
+				update();
 				clock.getDisplay().asyncExec(repaint);
 				
 				try {
@@ -63,8 +91,9 @@ public class ClockView extends ViewPart {
 				}
 			}
 		});
-		t.setDaemon(true);
-		t.start();
+		
+		th.setDaemon(true);
+		th.start();
 	}
 	
 	final int radius = 100; 
@@ -81,10 +110,9 @@ public class ClockView extends ViewPart {
 		g2.drawArc(x, y, radius*2, radius*2, 0, 360);
 
 		// update();
-		draw(g2, second, 5, e.display.getSystemColor(SWT.COLOR_RED), 1);
-		draw(g2, minute, 15, e.display.getSystemColor(SWT.COLOR_BLUE), 2);
-		draw(g2, (hour%12)*5, 35, e.display.getSystemColor(SWT.COLOR_GREEN), 4);
-		
+		draw(g2, second, 5, RED, 1);
+		draw(g2, minute, 15, BLUE, 2);
+		draw(g2, (hour%12)*5, 35, GREEN, 4);
 	}
 	
 	private final double[] radians = new double[61];

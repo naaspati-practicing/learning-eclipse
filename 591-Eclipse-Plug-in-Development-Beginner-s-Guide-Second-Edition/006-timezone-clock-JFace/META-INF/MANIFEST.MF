@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: 006-timezone-clock-JFace
+Bundle-SymbolicName: 006-timezone-clock-JFace;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: javax.inject,
+ org.eclipse.osgi,
+ org.eclipse.jface,
+ org.eclipse.e4.ui.model.workbench,
+ org.eclipse.e4.ui.di,
+ org.eclipse.e4.ui.services,
+ org.eclipse.e4.core.di.annotations,
+ org.eclipse.ui;bundle-version="3.110.0",
+ org.eclipse.e4.ui.workbench;bundle-version="1.7.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: javax.annotation;version="1.2.0"
+Automatic-Module-Name: 006-timezone-clock-JFace
